@@ -12,7 +12,9 @@ class CustomersController extends Controller
      */
     public function index()
     {
-        //
+            return inertia('customers/index',[
+                'customers' => Customers::all()
+            ]);
     }
 
     /**
