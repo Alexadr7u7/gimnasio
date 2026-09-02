@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Customers;
+use App\Http\Requests\StoreCustomerRequest;
 use Illuminate\Http\Request;
+
 
 class CustomersController extends Controller
 {
@@ -12,9 +14,9 @@ class CustomersController extends Controller
      */
     public function index()
     {
-            return inertia('customers/index',[
-                'customers' => Customers::all()
-            ]);
+        return inertia('customers/index', [
+            'customers' => Customers::all()
+        ]);
     }
 
     /**
@@ -22,15 +24,20 @@ class CustomersController extends Controller
      */
     public function create()
     {
-        //
+        return inertia('customers/create', [
+            'customers' => new Customers()
+        ]);
     }
 
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(StoreCustomerRequest $request)
     {
-        //
+        $validated = $request->validated();
+
+        Customers::create($validated);
+        return redirect()->route('customers.index')->with('success', 'Cliente creado exitosamente.');
     }
 
     /**

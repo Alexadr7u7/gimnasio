@@ -1,7 +1,8 @@
+import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableFooter, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head } from '@inertiajs/react';
+import { Head, Link } from '@inertiajs/react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Clientes',
@@ -22,8 +23,13 @@ export default function Index({customers}: { customers: Customer[] }) {
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Clientes" />
-            {
-             customers.length > 0 && (
+            <div className="m-2">
+                <Link
+                    href={route('customers.create')}
+                >
+                    <Button className="mb-4">Crear Cliente</Button>
+                </Link>
+            {customers.length > 0 && (
               <Table>
                 <TableCaption>A list of your recent invoices.</TableCaption>
                 <TableHeader>
@@ -63,6 +69,9 @@ export default function Index({customers}: { customers: Customer[] }) {
                 </TableFooter>
             </Table>
             )}
+            </div>
+
+           
            
         </AppLayout>
     );
