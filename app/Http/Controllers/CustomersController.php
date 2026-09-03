@@ -4,19 +4,27 @@ namespace App\Http\Controllers;
 
 use App\Models\Customers;
 use App\Http\Requests\StoreCustomerRequest;
-use App\Http\Requests\UptadeCustomerRequest;
+use App\Http\Requests\UpdateCustomerRequest;
 use Illuminate\Http\Request;
-
+use Inertia\Inertia;
 
 class CustomersController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        return inertia('customers/index', [
-            'customers' => Customers::all()
+        $perPage = $request->perPage ?? 10;
+        return Inertia::render('customers/index', [
+            'customers' => Customers::search($request->search)
+                ->latest()
+                ->paginate($perPage)
+                ->withQueryString(),
+            'filters' => [
+                'search' => $request->search,
+                'perPage' => $perPage,
+            ]
         ]);
     }
 
@@ -62,7 +70,7 @@ class CustomersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(UptadeCustomerRequest $request, Customers $customer)
+    public function update(UpdateCustomerRequest $request, Customers $customer)
     {
         $validated = $request->validated();
 

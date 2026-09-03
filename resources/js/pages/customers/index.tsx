@@ -1,7 +1,10 @@
+import CustomerSearch from '@/components/customer-search';
+import Pagination from '@/components/pagination';
+import { Badge } from '@/components/ui/badge';
 import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { Customer, Filters, PageLinkItem, type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
@@ -9,16 +12,23 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/customers',
     },
 ];
-interface Customer {
-    id: number;
-    name: string;
-    email: string;
-    phone: string;
-    status: string;
-    created_at: string;
-    updated_at: string;
-}
-export default function Index({ customers }: { customers: Customer[] }) {
+
+type CustomersPagination = {
+    data: Customer[];
+    links: PageLinkItem[];
+};
+
+type IndexProps = {
+    customers: CustomersPagination;
+    filters: Filters;
+};
+export default function Index({ customers, filters }: IndexProps) {
+    const { data, setData } = useForm({
+        search: filters.search || '',
+        perPage: filters.perPage,
+        sertBy: filters.sortBy,
+        sortDirection: filters.sortDirection,
+    });
     const { processing, delete: destroy } = useForm();
     const handleDelete = (id: number) => {
         if (confirm('¿Estás seguro de eliminar este cliente?')) {
@@ -32,7 +42,8 @@ export default function Index({ customers }: { customers: Customer[] }) {
                 <Link href={route('customers.create')}>
                     <Button className="mb-4">Crear Cliente</Button>
                 </Link>
-                {customers.length > 0 && (
+                <CustomerSearch filters={filters} search={data.search} setSearch={(value: string) => setData('search', value)} />
+                {customers.data.length > 0 && (
                     <Table>
                         <TableCaption>A list of your recent invoices.</TableCaption>
                         <TableHeader>
@@ -48,16 +59,22 @@ export default function Index({ customers }: { customers: Customer[] }) {
                             </TableRow>
                         </TableHeader>
                         <TableBody>
-                            {customers.map((customer) => (
+                            {customers.data.map((customer) => (
                                 <TableRow key={customer.id}>
                                     <TableCell className="font-medium">{customer.id}</TableCell>
                                     <TableCell>{customer.name}</TableCell>
                                     <TableCell>{customer.email}</TableCell>
                                     <TableCell>{customer.phone}</TableCell>
-                                    <TableCell>{customer.status}</TableCell>
+                                    <TableCell>
+                                        {customer.status === 'active' ? (
+                                            <Badge variant="default">Activo</Badge>
+                                        ) : (
+                                            <Badge variant="destructive">Inactivo</Badge>
+                                        )}
+                                    </TableCell>
                                     <TableCell>{customer.created_at}</TableCell>
                                     <TableCell>{customer.updated_at}</TableCell>
-                                    <TableCell className="text-right">
+                                    <TableCell className="space-x-2 text-right">
                                         <Link href={route('customers.edit', customer.id)}>
                                             <Button variant="default" size="sm">
                                                 Editar
@@ -72,6 +89,12 @@ export default function Index({ customers }: { customers: Customer[] }) {
                         </TableBody>
                     </Table>
                 )}
+                <Pagination
+                    links={customers.links}
+                    filters={filters}
+                    currentPage={data.perPage}
+                    setCurrentPage={(value: number) => setData('perPage', value)}
+                />
             </div>
         </AppLayout>
     );

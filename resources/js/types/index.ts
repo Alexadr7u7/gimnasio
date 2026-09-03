@@ -38,3 +38,26 @@ export interface User {
     updated_at: string;
     [key: string]: unknown; // This allows for additional properties...
 }
+
+export interface Customer {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+    status: string;
+    created_at: string;
+    updated_at: string;
+}
+
+export interface PageLinkItem {
+    url: string | null;
+    label: string;
+    active: boolean;
+}
+
+export interface Filters {
+    search: string;
+    perPage: number;
+    sortBy: string;
+    sortDirection: string;
+}

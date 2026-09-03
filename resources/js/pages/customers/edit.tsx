@@ -1,7 +1,7 @@
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import AppLayout from '@/layouts/app-layout';
-import { type BreadcrumbItem } from '@/types';
+import { Customer, type BreadcrumbItem } from '@/types';
 import { Head, useForm } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
@@ -10,13 +10,6 @@ const breadcrumbs: BreadcrumbItem[] = [
         href: '/customers/edit',
     },
 ];
-
-interface Customer {
-    id: number;
-    name: string;
-    email: string;
-    phone: string;
-}
 
 export default function Edit({ customers }: { customers: Customer }) {
     const { data, setData, put, processing, errors } = useForm({
