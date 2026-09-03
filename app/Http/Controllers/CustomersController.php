@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Customers;
 use App\Http\Requests\StoreCustomerRequest;
+use App\Http\Requests\UptadeCustomerRequest;
 use Illuminate\Http\Request;
 
 
@@ -61,9 +62,12 @@ class CustomersController extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Customers $customers)
+    public function update(UptadeCustomerRequest $request, Customers $customer)
     {
-        //
+        $validated = $request->validated();
+
+        $customer->update($validated);
+        return redirect()->route('customers.index')->with('success', 'Cliente actualizado exitosamente.');
     }
 
     /**

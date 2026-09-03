@@ -18,6 +18,7 @@ Route::get('customers', [CustomersController::class, 'index'])->name('customers.
 Route::get('customers/create', [CustomersController::class, 'create'])->name('customers.create');
 Route::post('customers', [CustomersController::class, 'store'])->name('customers.store');
 Route::get('customers/{customer}/edit', [CustomersController::class, 'edit'])->name('customers.edit');
+Route::put('customers/{customer}', [CustomersController::class, 'update'])->name('customers.update');
 
 require __DIR__ . '/settings.php';
 require __DIR__ . '/auth.php';
