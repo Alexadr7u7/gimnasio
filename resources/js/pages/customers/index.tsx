@@ -2,7 +2,7 @@ import { Button } from '@/components/ui/button';
 import { Table, TableBody, TableCaption, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import AppLayout from '@/layouts/app-layout';
 import { type BreadcrumbItem } from '@/types';
-import { Head, Link } from '@inertiajs/react';
+import { Head, Link, useForm } from '@inertiajs/react';
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Clientes',
@@ -19,6 +19,12 @@ interface Customer {
     updated_at: string;
 }
 export default function Index({ customers }: { customers: Customer[] }) {
+    const { processing, delete: destroy } = useForm();
+    const handleDelete = (id: number) => {
+        if (confirm('¿Estás seguro de eliminar este cliente?')) {
+            destroy(route('customers.destroy', id));
+        }
+    };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Clientes" />
@@ -57,6 +63,9 @@ export default function Index({ customers }: { customers: Customer[] }) {
                                                 Editar
                                             </Button>
                                         </Link>
+                                        <Button variant="destructive" size="sm" disabled={processing} onClick={() => handleDelete(customer.id)}>
+                                            Eliminar
+                                        </Button>
                                     </TableCell>
                                 </TableRow>
                             ))}
