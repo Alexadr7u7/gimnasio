@@ -6,27 +6,34 @@ import { Head, useForm } from '@inertiajs/react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     {
-        title: 'Crear Cliente',
-        href: '/customers/create',
+        title: 'Editar Cliente',
+        href: '/customers/edit',
     },
 ];
 
-export default function Create() {
-    const { data, setData, post, processing, errors } = useForm({
-        name: '',
-        email: '',
-        phone: '',
+interface Customer {
+    id: number;
+    name: string;
+    email: string;
+    phone: string;
+}
+
+export default function Edit({ customers }: { customers: Customer }) {
+    const { data, setData, put, processing, errors } = useForm({
+        name: customers.name,
+        email: customers.email,
+        phone: customers.phone,
     });
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleUpdate = (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
-        post(route('customers.store'));
+        put(route('customers.update', customers.id));
     };
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
-            <Head title="Crear Cliente" />
+            <Head title="Editar Cliente" />
             <div className="w-8/12 p-4">
-                <h1 className="text-2xl font-bold">Crear Cliente</h1>
-                <form method="post" className="space-y-4" onSubmit={handleSubmit}>
+                <h1 className="text-2xl font-bold">Editar Cliente</h1>
+                <form method="post" className="space-y-4" onSubmit={handleUpdate}>
                     <div className="gap-1.5">
                         <Input placeholder="Nombre" value={data.name} onChange={(e) => setData('name', e.target.value)} />
                         {errors.name && <p className="text-red-500">{errors.name}</p>}
@@ -40,7 +47,7 @@ export default function Create() {
                         {errors.phone && <p className="text-red-500">{errors.phone}</p>}
                     </div>
                     <Button disabled={processing} type="submit">
-                        Agregar Cliente
+                        Editar Cliente
                     </Button>
                 </form>
             </div>

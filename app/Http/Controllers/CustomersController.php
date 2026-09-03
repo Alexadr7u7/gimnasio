@@ -51,9 +51,11 @@ class CustomersController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Customers $customers)
+    public function edit(Customers $customer)
     {
-        //
+        return inertia('customers/edit', [
+            'customers' => $customer
+        ]);
     }
 
     /**
