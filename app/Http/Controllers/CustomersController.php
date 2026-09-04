@@ -16,14 +16,18 @@ class CustomersController extends Controller
     public function index(Request $request)
     {
         $perPage = $request->perPage ?? 10;
+        $sortBy = $request->sortBy ?? 'created_at';
+        $sortDirection = $request->sortDirection ?? 'DESC';
         return Inertia::render('customers/index', [
             'customers' => Customers::search($request->search)
-                ->latest()
+                ->orderBy($sortBy, $sortDirection)
                 ->paginate($perPage)
                 ->withQueryString(),
             'filters' => [
                 'search' => $request->search,
                 'perPage' => $perPage,
+                'sortBy' => $sortBy,
+                'sortDirection' => $sortDirection,
             ]
         ]);
     }
