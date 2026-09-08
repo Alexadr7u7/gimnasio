@@ -16,6 +16,18 @@ class Customers extends Model
         'phone',
     ];
 
+    public function memberships()
+    {
+        return $this->hasMany(Customer_memberships::class, 'customer_id');
+    }
+
+    /**
+     * La membresía más reciente del cliente (la que nos interesa mostrar en la tabla).
+     */
+    public function latestMembership()
+    {
+        return $this->hasOne(Customer_memberships::class, 'customer_id')->latestOfMany('start_date');
+    }
     public function scopeSearch($query, $search)
     {
         if (!$search) {

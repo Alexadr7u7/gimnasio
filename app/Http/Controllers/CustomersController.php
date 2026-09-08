@@ -20,6 +20,7 @@ class CustomersController extends Controller
         $sortDirection = $request->sortDirection ?? 'DESC';
         return Inertia::render('customers/index', [
             'customers' => Customers::search($request->search)
+                ->with('latestMembership.membership')
                 ->orderBy($sortBy, $sortDirection)
                 ->paginate($perPage)
                 ->withQueryString(),

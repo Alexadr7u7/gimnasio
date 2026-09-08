@@ -39,16 +39,31 @@ export interface User {
     [key: string]: unknown; // This allows for additional properties...
 }
 
+export interface Membership {
+    id: number;
+    name: string;
+    price: number;
+    duration: number;
+}
+
+export interface CustomerMembership {
+    id: number;
+    status: 'active' | 'inactive' | 'expiring_soon' | 'expired';
+    computed_status: 'active' | 'inactive' | 'expiring_soon' | 'expired';
+    start_date: string;
+    end_date: string;
+    membership: Membership;
+}
+
 export interface Customer {
     id: number;
     name: string;
     email: string;
     phone: string;
-    status: string;
     created_at: string;
     updated_at: string;
+    latest_membership: CustomerMembership | null;
 }
-
 export interface PageLinkItem {
     url: string | null;
     label: string;

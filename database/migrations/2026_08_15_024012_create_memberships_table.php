@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('name');
             $table->decimal('price', 8, 2);
-            $table->enum('duration', ['month', 'week', 'visited', 'year'])->default('month');
+            $table->enum('duration', ['monthly', 'weekly', 'visited', 'year'])->default('monthly');
             $table->timestamps();
         });
     }

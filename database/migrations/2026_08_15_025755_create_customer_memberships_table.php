@@ -19,6 +19,7 @@ return new class extends Migration
             $table->foreignId('membership_id')
                 ->constrained('memberships')
                 ->onDelete('cascade');
+            $table->enum('status', ['active', 'expiring_soon', 'expired'])->default('active');
             $table->date('start_date');
             $table->date('end_date');
             $table->timestamps();
