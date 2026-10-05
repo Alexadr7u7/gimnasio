@@ -33,6 +33,7 @@ class CustomersController extends Controller
                 'active' => Customers::status('active')->count(),
                 'expiring' => Customers::status('expiring')->count(),
                 'expired' => Customers::status('expired')->count(),
+                'new_this_month' => Customers::where('created_at', '>=', now()->startOfMonth())->count(),
             ],
             'memberships' => Memberships::select('id', 'name')->orderBy('name')->get(),
             'filters' => [

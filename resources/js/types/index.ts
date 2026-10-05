@@ -84,4 +84,5 @@ export type Stats = {
     active: number;
     expiring: number;
     expired: number;
+    new_this_month: number;
 };

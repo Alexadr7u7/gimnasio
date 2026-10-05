@@ -64,7 +64,7 @@ export default function Pagination({ links, currentPage, setCurrentPage, filters
                             preserveScroll
                             className={`flex h-8 min-w-8 items-center justify-center gap-1 rounded-lg px-2.5 text-xs font-medium transition-colors ${
                                 link.active
-                                    ? 'bg-primary text-primary-foreground shadow-sm'
+                                    ? 'bg-primary text-white shadow-sm'
                                     : isDisabled
                                       ? 'bg-accent/30 text-muted-foreground pointer-events-none opacity-40'
                                       : 'bg-accent/40 text-foreground hover:bg-accent'

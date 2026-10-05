@@ -60,7 +60,7 @@ export default function Index({ customers, filters, memberships, stats }: IndexP
                     </div>
                 </div>
 
-                <CustomerStats />
+                <CustomerStats stats={stats} />
 
                 <div className="bg-card mb-4 flex flex-col gap-4 rounded-xl p-4 shadow-md">
                     <CustomerSearch

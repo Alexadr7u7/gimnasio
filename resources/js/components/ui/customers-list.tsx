@@ -46,7 +46,6 @@ export default function CustomerList({ customers, filters }: CustomerListProps) 
 
     return (
         <Table>
-            <TableCaption>Lista de clientes registrados.</TableCaption>
             <TableHeader>
                 <TableRow className="h-11 uppercase tracking-wider">
                     <TableHead className="px-4">
