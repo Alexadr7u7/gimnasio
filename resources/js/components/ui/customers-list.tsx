@@ -56,11 +56,11 @@ export default function CustomerList({ customers, filters }: CustomerListProps) 
                         <SortLink filters={filters} field="phone" label="Teléfono" />
                     </TableHead>
                     <TableHead className="px-4">Plan</TableHead>
-                    <TableHead className="px-4">Estatus</TableHead>
-                    <TableHead className="px-4">
-                        <SortLink filters={filters} field="created_at" label="Registrado" />
-                    </TableHead>
+                    <TableHead className="px-4">Estado</TableHead>
+                 
                     <TableHead className="px-4">Vencimiento</TableHead>
+                    {/* <TableHead className="px-4">Asistencias / Accesos</TableHead> */}
+
                     <TableHead className="px-4 text-right">Acciones</TableHead>
                 </TableRow>
             </TableHeader>
@@ -114,13 +114,7 @@ export default function CustomerList({ customers, filters }: CustomerListProps) 
                                 {membership ? <MembershipStatusBadge status={membership.computed_status} /> : <span className="text-xs text-muted-foreground">—</span>}
                             </TableCell>
 
-                            {/* Registrado */}
-                            <TableCell className="px-4 py-3.5">
-                                <div className="flex flex-col">
-                                    <span className="font-mono text-sm text-foreground">{formatDate(customer.created_at)}</span>
-                                    <span className="text-xs text-muted-foreground">{daysUntil(customer.created_at)}</span>
-                                </div>
-                            </TableCell>
+                   
 
                             {/* Vencimiento */}
                             <TableCell className="px-4 py-3.5">

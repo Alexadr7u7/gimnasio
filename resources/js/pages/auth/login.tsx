@@ -40,7 +40,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
             <Head title="Log in" />
 
             <form className="space-y-4" onSubmit={submit}>
-                <div className="bg-dark-950/60 mb-5 flex items-center justify-center gap-2 rounded-lg border border-white/5 px-3 py-2 text-xs text-gray-400">
+                <div className="bg-background mb-5 flex items-center justify-center gap-2 rounded-lg border border-white/5 px-3 py-2 text-xs text-gray-400">
                     <ShieldCheck className="text-primary h-3.5 w-3.5" />
                     <span className="text-[11px] font-medium tracking-wider text-gray-300 uppercase">Portal de Acceso Administrativo Exclusivo</span>
                 </div>
@@ -63,7 +63,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             value={data.email}
                             onChange={(e) => setData('email', e.target.value)}
                             placeholder="nombre@titangym.com"
-                            className="bg-dark-950/90 focus-visible:ring-brand-500 border-white/10 pl-10 text-white placeholder-gray-600"
+                            className="pl-10"
                         />
                     </div>
                     <InputError message={errors.email} />
@@ -97,7 +97,7 @@ export default function Login({ status, canResetPassword }: LoginProps) {
                             value={data.password}
                             onChange={(e) => setData('password', e.target.value)}
                             placeholder="••••••••"
-                            className="bg-dark-950/90 focus-visible:ring-brand-500 border-white/10 pr-10 pl-10 tracking-widest text-white placeholder-gray-600"
+                            className="pl-10"
                         />
                         <button
                             type="button"

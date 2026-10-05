@@ -14,13 +14,7 @@ class MembershipsSeeder extends Seeder
     public function run(): void
     {
         $memberships = [
-            [
-                'name' => 'visited',
-                'price' => 50.00,
-                'duration' => 'visited',
-                'created_at' => now(),
-                'updated_at' => now(),
-            ],
+
             [
                 'name' => 'Semanal',
                 'price' => 100.00,
@@ -36,7 +30,7 @@ class MembershipsSeeder extends Seeder
                 'updated_at' => now(),
             ],
             [
-                'name' => 'Premium',
+                'name' => 'Anual',
                 'price' => 2400.00,
                 'duration' => 'year',
                 'created_at' => now(),

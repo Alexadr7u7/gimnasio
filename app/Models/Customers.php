@@ -21,13 +21,11 @@ class Customers extends Model
         return $this->hasMany(Customer_memberships::class, 'customer_id');
     }
 
-    /**
-     * La membresía más reciente del cliente (la que nos interesa mostrar en la tabla).
-     */
     public function latestMembership()
     {
         return $this->hasOne(Customer_memberships::class, 'customer_id')->latestOfMany('start_date');
     }
+
     public function scopeSearch($query, $search)
     {
         if (!$search) {
@@ -38,5 +36,60 @@ class Customers extends Model
             $q->where('name', 'like', "%{$search}%")
                 ->orWhere('email', 'like', "%{$search}%");
         });
+    }
+
+    /**
+     * Filtra por plan (membership_id de la membresía más reciente).
+     */
+    public function scopePlan($query, $plan)
+    {
+        if (!$plan) {
+            return $query;
+        }
+
+        return $query->whereHas('latestMembership', fn($m) => $m->where('membership_id', $plan));
+    }
+
+    /**
+     * Filtra por estado según la fecha de vencimiento de la membresía más reciente.
+     */
+    public function scopeStatus($query, $status)
+    {
+        if (!$status) {
+            return $query;
+        }
+
+        $today = now()->toDateString();
+
+        return $query->whereHas('latestMembership', function ($m) use ($status, $today) {
+            match ($status) {
+                'active'   => $m->whereDate('end_date', '>=', $today),
+                'expiring' => $m->whereBetween('end_date', [$today, now()->addDays(7)->toDateString()]),
+                'expired'  => $m->whereDate('end_date', '<', $today),
+                default    => null,
+            };
+        });
+    }
+
+    /**
+     * Ordena por una columna permitida (o por vencimiento de la última membresía).
+     */
+    public function scopeSortBy($query, $sortBy, $direction = 'desc')
+    {
+        $direction = strtolower($direction) === 'asc' ? 'asc' : 'desc';
+
+        if ($sortBy === 'expiration') {
+            return $query->orderBy(
+                Customer_memberships::select('end_date')
+                    ->whereColumn('customer_id', 'customers.id')
+                    ->latest('start_date')
+                    ->limit(1),
+                $direction
+            );
+        }
+
+        $allowed = ['created_at', 'name', 'email'];
+
+        return $query->orderBy(in_array($sortBy, $allowed) ? $sortBy : 'created_at', $direction);
     }
 }

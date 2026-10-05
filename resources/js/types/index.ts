@@ -70,9 +70,11 @@ export interface PageLinkItem {
     active: boolean;
 }
 
-export interface Filters {
+export type Filters = {
     search: string;
     perPage: number;
     sortBy: string;
-    sortDirection: string;
-}
+    sortDirection: 'asc' | 'desc';
+    plan?: string;
+    status?: string;
+};

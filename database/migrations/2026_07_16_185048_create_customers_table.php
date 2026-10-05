@@ -16,7 +16,6 @@ return new class extends Migration
             $table->string('name');
             $table->string('phone', 20)->nullable();
             $table->string('email')->unique();
-            $table->enum('status', ['active', 'inactive'])->default('active');
             $table->timestamps();
         });
     }

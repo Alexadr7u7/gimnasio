@@ -7,6 +7,7 @@ import { Customer, Filters, PageLinkItem, type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { UserPlus } from 'lucide-react';
 import CustomerStats from './components/customers-stats';
+
 const breadcrumbs: BreadcrumbItem[] = [
     {
         title: 'Clientes',
@@ -19,15 +20,25 @@ type CustomersPagination = {
     links: PageLinkItem[];
 };
 
+type Counts = {
+    all: number;
+    active: number;
+    expiring: number;
+    expired: number;
+};
+
 type IndexProps = {
     customers: CustomersPagination;
     filters: Filters;
+    memberships: { id: number; name: string }[];
+    counts: Counts;
 };
-export default function Index({ customers, filters }: IndexProps) {
+
+export default function Index({ customers, filters, memberships, counts }: IndexProps) {
     const { data, setData } = useForm({
         search: filters.search || '',
         perPage: filters.perPage,
-        sertBy: filters.sortBy,
+        sortBy: filters.sortBy,
         sortDirection: filters.sortDirection,
     });
     const { processing, delete: destroy } = useForm();
@@ -59,7 +70,13 @@ export default function Index({ customers, filters }: IndexProps) {
                 <CustomerStats />
 
                 <div className="bg-card mb-4 flex flex-col gap-4 rounded-xl p-4 shadow-md">
-                    <CustomerSearch filters={filters} search={data.search} setSearch={(value: string) => setData('search', value)} />
+                    <CustomerSearch
+                        filters={filters}
+                        search={data.search}
+                        setSearch={(value: string) => setData('search', value)}
+                        memberships={memberships}
+                        counts={counts}
+                    />
                 </div>
 
                 <div className="bg-card overflow-x-auto rounded-xl shadow-xl">

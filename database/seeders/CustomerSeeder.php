@@ -1,6 +1,7 @@
 <?php
 
 namespace Database\Seeders;
+
 use Illuminate\Support\Facades\DB;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
@@ -12,12 +13,11 @@ class CustomerSeeder extends Seeder
      */
     public function run(): void
     {
-       $customers = [
-                        [
+        $customers = [
+            [
                 'name'       => 'Sandra López',
                 'phone'      => '2472344223',
                 'email'      => 'sandra@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -25,7 +25,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Carlos Ramírez',
                 'phone'      => '2471122334',
                 'email'      => 'carlos@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -33,7 +32,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'María Torres',
                 'phone'      => '2473344556',
                 'email'      => 'maria.torres@gmail.com',
-                'status'     => 'inactive',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -41,7 +39,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Luis Hernández',
                 'phone'      => '2474455667',
                 'email'      => 'luis.hernandez@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -49,7 +46,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Ana Martínez',
                 'phone'      => '2475566778',
                 'email'      => 'ana.martinez@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -57,7 +53,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Jorge Sánchez',
                 'phone'      => '2476677889',
                 'email'      => 'jorge.sanchez@gmail.com',
-                'status'     => 'inactive',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -65,7 +60,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Fernanda Cruz',
                 'phone'      => '2477788990',
                 'email'      => 'fernanda.cruz@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -73,7 +67,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Ricardo Flores',
                 'phone'      => '2478899001',
                 'email'      => 'ricardo.flores@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -81,7 +74,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Paola Jiménez',
                 'phone'      => '2479900112',
                 'email'      => 'paola.jimenez@gmail.com',
-                'status'     => 'inactive',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -89,7 +81,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Miguel Ángel Ruiz',
                 'phone'      => '2470011223',
                 'email'      => 'miguel.ruiz@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -97,7 +88,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Daniela Morales',
                 'phone'      => '2471234567',
                 'email'      => 'daniela.morales@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -105,7 +95,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Eduardo Vargas',
                 'phone'      => '2472345678',
                 'email'      => 'eduardo.vargas@gmail.com',
-                'status'     => 'inactive',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -113,7 +102,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Karla Mendoza',
                 'phone'      => '2473456789',
                 'email'      => 'karla.mendoza@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -121,7 +109,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Andrés Guzmán',
                 'phone'      => '2474567890',
                 'email'      => 'andres.guzman@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -129,7 +116,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Valeria Reyes',
                 'phone'      => '2475678901',
                 'email'      => 'valeria.reyes@gmail.com',
-                'status'     => 'inactive',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -137,7 +123,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Óscar Castillo',
                 'phone'      => '2476789012',
                 'email'      => 'oscar.castillo@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -145,7 +130,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Gabriela Ortiz',
                 'phone'      => '2477890123',
                 'email'      => 'gabriela.ortiz@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -153,7 +137,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Roberto Silva',
                 'phone'      => '2478901234',
                 'email'      => 'roberto.silva@gmail.com',
-                'status'     => 'inactive',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -161,7 +144,6 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Ximena Delgado',
                 'phone'      => '2479012345',
                 'email'      => 'ximena.delgado@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
@@ -169,15 +151,13 @@ class CustomerSeeder extends Seeder
                 'name'       => 'Alejandro Núñez',
                 'phone'      => '2470123456',
                 'email'      => 'alejandro.nunez@gmail.com',
-                'status'     => 'active',
                 'created_at' => now(),
                 'updated_at' => now(),
             ],
 
-           
-          
+
+
         ];
         DB::table('customers')->insert($customers);
-                
     }
 }

@@ -1,66 +1,121 @@
-import { Button } from '@/components/ui/button';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
 import { Filters } from '@/types';
 import { router } from '@inertiajs/react';
+import { Search } from 'lucide-react';
 import React from 'react';
+import { Button } from './ui/button';
+import { Input } from './ui/input';
+
+type Counts = {
+    all: number;
+    active: number;
+    expiring: number;
+    expired: number;
+};
 
 type CustomerSearchProps = {
     search: string;
     setSearch: (value: string) => void;
     filters: Filters;
+    memberships: { id: number; name: string }[];
+    counts: Counts;
 };
 
-export default function CustomerSearch({ search, setSearch, filters }: CustomerSearchProps) {
-    const [timeoutId, setTimeoutId] = React.useState<ReturnType<typeof setTimeout> | null>(null);
+const STATUS_OPTIONS = [
+    { key: '', label: 'Todos', count: 'all', dot: null },
+    { key: 'active', label: 'Activos', count: 'active', dot: 'bg-primary animate-pulse' },
+    { key: 'expiring', label: 'Por Vencer', count: 'expiring', dot: 'bg-tertiary-container' },
+    { key: 'expired', label: 'Vencidos', count: 'expired', dot: 'bg-error-container' },
+] as const;
+
+const SORT_OPTIONS = [
+    { label: 'Recientes', sortBy: 'created_at', sortDirection: 'desc' },
+    { label: 'Vencimiento', sortBy: 'expiration', sortDirection: 'asc' },
+    { label: 'Nombre A-Z', sortBy: 'name', sortDirection: 'asc' },
+];
+
+export default function CustomerSearch({ search, setSearch, filters, memberships, counts }: CustomerSearchProps) {
+    const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
     React.useEffect(() => {
         return () => {
-            if (timeoutId) {
-                clearTimeout(timeoutId);
-            }
+            if (timeoutRef.current) clearTimeout(timeoutRef.current);
         };
-    }, [timeoutId]);
+    }, []);
+
+    // Mezcla los filtros actuales con el cambio nuevo
+    const applyFilters = (params: Partial<Filters>) => {
+        router.get(route('customers.index'), { ...filters, ...params }, { preserveState: true, preserveScroll: true });
+    };
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const customerInput = e.target.value;
-        setSearch(customerInput);
-        if (timeoutId) {
-            clearTimeout(timeoutId);
-        }
+        const value = e.target.value;
+        setSearch(value);
+        if (timeoutRef.current) clearTimeout(timeoutRef.current);
+        timeoutRef.current = setTimeout(() => applyFilters({ search: value }), 300);
+    };
 
-        const newTimeoutId = setTimeout(() => {
-            router.get(
-                route('customers.index'),
-                { ...filters, search: customerInput },
-                {
-                    preserveState: true,
-                    preserveScroll: true,
-                },
-            );
-        }, 300);
-        setTimeoutId(newTimeoutId);
-    };
-    const handleReset = () => {
-        setSearch('');
-        router.get(
-            route('customers.index'),
-            { ...filters, search: '' },
-            {
-                preserveState: true,
-                preserveScroll: true,
-            },
-        );
-    };
+    const currentStatus = filters.status ?? '';
+    const currentSortBy = filters.sortBy ?? 'created_at';
+
     return (
-        <div className="flex w-full max-w-sm items-center space-x-2">
-            <div className="felx-1">
-                <Label>Buscar clientes</Label>
-                <Input type="text" name="search" placeholder="Buscar clientes..." onChange={handleChange} value={search} />
+        <div className="p-space-md mb-space-md gap-space-md flex flex-col rounded-xl shadow-md backdrop-blur-xl">
+            <div className="grid grid-cols-1 gap-2 md:grid-cols-12">
+                <div className="relative md:col-span-6">
+                    <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3.5 text-gray-500">
+                        <Search className="h-4 w-4" />
+                    </div>
+                    <Input type="text" name="search" placeholder="Buscar clientes..." onChange={handleChange} value={search} className="pl-10" />
+                </div>
+
+                <div className="md:col-span-3">
+                    <select
+                        value={filters.plan ?? ''}
+                        onChange={(e) => applyFilters({ plan: e.target.value })}
+                        className="bg-background focus:bg-surface-container-high h-11 w-full rounded-lg px-2 text-sm focus:outline-none"
+                    >
+                        <option value="">Todos los Planes</option>
+                        {memberships.map((m) => (
+                            <option key={m.id} value={m.id}>
+                                {m.name}
+                            </option>
+                        ))}
+                    </select>
+                </div>
             </div>
-            <Button variant="destructive" className="cursos-pointer self-end" onClick={handleReset}>
-                x
-            </Button>
+
+            <div className="flex flex-wrap items-center justify-between pt-5">
+                <div className="flex items-center gap-3">
+                    <span className="text-outline text-tertiary text-sm tracking-wider uppercase">Estado:</span>
+                    <div className="flex items-center gap-1 p-1">
+                        {STATUS_OPTIONS.map((s) => (
+                            <Button
+                                key={s.key}
+                                variant={currentStatus === s.key ? 'default' : 'outline'}
+                                onClick={() => applyFilters({ status: s.key })}
+                            >
+                                {s.dot && <span className={`h-2 w-2 rounded-full ${s.dot}`}></span>}
+                                {s.label} ({(counts?.[s.count] ?? 0).toLocaleString()})
+                            </Button>
+                        ))}
+                    </div>
+                </div>
+
+                <div className="flex items-center gap-3">
+                    <span className="text-outline text-tertiary text-sm tracking-wider uppercase">Ordenar:</span>
+                    <div className="flex items-center gap-1 p-1">
+                        {SORT_OPTIONS.map((o) => (
+                            <Button
+                                key={o.sortBy}
+                                variant={currentSortBy === o.sortBy ? 'default' : 'outline'}
+                                className="px-space-xs"
+                                onClick={() => applyFilters({ sortBy: o.sortBy, sortDirection: o.sortDirection as 'asc' | 'desc' })}
+                            >
+                                {o.label}
+                            </Button>
+                        ))}
+                    </div>
+                </div>
+            </div>
         </div>
     );
 }

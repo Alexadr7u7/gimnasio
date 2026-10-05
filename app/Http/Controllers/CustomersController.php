@@ -7,6 +7,7 @@ use App\Http\Requests\StoreCustomerRequest;
 use App\Http\Requests\UpdateCustomerRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
+use App\Models\Memberships;
 
 class CustomersController extends Controller
 {
@@ -17,22 +18,27 @@ class CustomersController extends Controller
     {
         $perPage = $request->perPage ?? 10;
         $sortBy = $request->sortBy ?? 'created_at';
-        $sortDirection = $request->sortDirection ?? 'DESC';
+        $sortDirection = $request->sortDirection ?? 'desc';
+
         return Inertia::render('customers/index', [
             'customers' => Customers::search($request->search)
+                ->plan($request->plan)
+                ->status($request->status)
+                ->sortBy($sortBy, $sortDirection)
                 ->with('latestMembership.membership')
-                ->orderBy($sortBy, $sortDirection)
                 ->paginate($perPage)
                 ->withQueryString(),
+            'memberships' => Memberships::select('id', 'name')->orderBy('name')->get(),
             'filters' => [
                 'search' => $request->search,
                 'perPage' => $perPage,
                 'sortBy' => $sortBy,
                 'sortDirection' => $sortDirection,
-            ]
+                'plan' => $request->plan,
+                'status' => $request->status,
+            ],
         ]);
     }
-
     /**
      * Show the form for creating a new resource.
      */
