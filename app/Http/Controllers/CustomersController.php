@@ -28,6 +28,12 @@ class CustomersController extends Controller
                 ->with('latestMembership.membership')
                 ->paginate($perPage)
                 ->withQueryString(),
+            'stats' => [
+                'all' => Customers::count(),
+                'active' => Customers::status('active')->count(),
+                'expiring' => Customers::status('expiring')->count(),
+                'expired' => Customers::status('expired')->count(),
+            ],
             'memberships' => Memberships::select('id', 'name')->orderBy('name')->get(),
             'filters' => [
                 'search' => $request->search,

@@ -3,7 +3,7 @@ import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import CustomerList from '@/components/ui/customers-list';
 import AppLayout from '@/layouts/app-layout';
-import { Customer, Filters, PageLinkItem, type BreadcrumbItem } from '@/types';
+import { Customer, Filters, PageLinkItem, Stats, type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
 import { UserPlus } from 'lucide-react';
 import CustomerStats from './components/customers-stats';
@@ -20,21 +20,14 @@ type CustomersPagination = {
     links: PageLinkItem[];
 };
 
-type Counts = {
-    all: number;
-    active: number;
-    expiring: number;
-    expired: number;
-};
-
 type IndexProps = {
     customers: CustomersPagination;
     filters: Filters;
     memberships: { id: number; name: string }[];
-    counts: Counts;
+    stats: Stats;
 };
 
-export default function Index({ customers, filters, memberships, counts }: IndexProps) {
+export default function Index({ customers, filters, memberships, stats }: IndexProps) {
     const { data, setData } = useForm({
         search: filters.search || '',
         perPage: filters.perPage,
@@ -75,7 +68,7 @@ export default function Index({ customers, filters, memberships, counts }: Index
                         search={data.search}
                         setSearch={(value: string) => setData('search', value)}
                         memberships={memberships}
-                        counts={counts}
+                        stats={stats}
                     />
                 </div>
 

@@ -78,3 +78,10 @@ export type Filters = {
     plan?: string;
     status?: string;
 };
+
+export type Stats = {
+    all: number;
+    active: number;
+    expiring: number;
+    expired: number;
+};

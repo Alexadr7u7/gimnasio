@@ -1,30 +1,23 @@
-import { Filters } from '@/types';
+import { Filters, Stats } from '@/types';
 import { router } from '@inertiajs/react';
 import { Search } from 'lucide-react';
 import React from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 
-type Counts = {
-    all: number;
-    active: number;
-    expiring: number;
-    expired: number;
-};
-
 type CustomerSearchProps = {
     search: string;
     setSearch: (value: string) => void;
     filters: Filters;
     memberships: { id: number; name: string }[];
-    counts: Counts;
+    stats: Stats;
 };
 
 const STATUS_OPTIONS = [
     { key: '', label: 'Todos', count: 'all', dot: null },
-    { key: 'active', label: 'Activos', count: 'active', dot: 'bg-primary animate-pulse' },
-    { key: 'expiring', label: 'Por Vencer', count: 'expiring', dot: 'bg-tertiary-container' },
-    { key: 'expired', label: 'Vencidos', count: 'expired', dot: 'bg-error-container' },
+    { key: 'active', label: 'Activos', count: 'active', dot: 'bg-tertiary animate-pulse' },
+    { key: 'expiring', label: 'Por Vencer', count: 'expiring', dot: 'bg-tertiary' },
+    { key: 'expired', label: 'Vencidos', count: 'expired', dot: 'bg-primary' },
 ] as const;
 
 const SORT_OPTIONS = [
@@ -33,7 +26,7 @@ const SORT_OPTIONS = [
     { label: 'Nombre A-Z', sortBy: 'name', sortDirection: 'asc' },
 ];
 
-export default function CustomerSearch({ search, setSearch, filters, memberships, counts }: CustomerSearchProps) {
+export default function CustomerSearch({ search, setSearch, filters, memberships, stats }: CustomerSearchProps) {
     const timeoutRef = React.useRef<ReturnType<typeof setTimeout> | null>(null);
 
     React.useEffect(() => {
@@ -90,11 +83,11 @@ export default function CustomerSearch({ search, setSearch, filters, memberships
                         {STATUS_OPTIONS.map((s) => (
                             <Button
                                 key={s.key}
-                                variant={currentStatus === s.key ? 'default' : 'outline'}
+                                variant={currentStatus === s.key ? 'active' : 'outline'}
                                 onClick={() => applyFilters({ status: s.key })}
                             >
                                 {s.dot && <span className={`h-2 w-2 rounded-full ${s.dot}`}></span>}
-                                {s.label} ({(counts?.[s.count] ?? 0).toLocaleString()})
+                                {s.label} ({(stats?.[s.count] ?? 0).toLocaleString()})
                             </Button>
                         ))}
                     </div>
@@ -106,7 +99,7 @@ export default function CustomerSearch({ search, setSearch, filters, memberships
                         {SORT_OPTIONS.map((o) => (
                             <Button
                                 key={o.sortBy}
-                                variant={currentSortBy === o.sortBy ? 'default' : 'outline'}
+                                variant={currentSortBy === o.sortBy ? 'active' : 'outline'}
                                 className="px-space-xs"
                                 onClick={() => applyFilters({ sortBy: o.sortBy, sortDirection: o.sortDirection as 'asc' | 'desc' })}
                             >
