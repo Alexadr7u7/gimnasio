@@ -4,6 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Contracts\Validation\ValidationRule;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Validation\Rule;
 
 class StoreCustomerRequest extends FormRequest
 {
@@ -23,9 +24,12 @@ class StoreCustomerRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:customers,email'],
-            'phone' => ['required', 'string', 'max:20'],
+            'name'           => ['required', 'string', 'max:255'],
+            'email'          => ['required', 'email', 'max:255', 'unique:customers,email'],
+            'phone'          => ['required', 'string', 'max:30'],
+            'membership_id'  => ['required', 'exists:memberships,id'],
+            'payment_method' => ['required', Rule::in(['cash', 'card', 'transfer'])],
+            'start_date'     => ['required', 'date'],
         ];
     }
 }

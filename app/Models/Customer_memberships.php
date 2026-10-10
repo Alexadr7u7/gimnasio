@@ -34,7 +34,10 @@ class Customer_memberships extends Model
     {
         return $this->belongsTo(Memberships::class, 'membership_id');
     }
-
+    public function payments()
+    {
+        return $this->hasMany(Payments::class, 'customer_membership_id');
+    }
     /**
      * Estado calculado en tiempo real, sin depender de que
      * el campo 'status' de la BD esté actualizado.

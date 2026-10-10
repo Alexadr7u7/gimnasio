@@ -8,6 +8,8 @@ use App\Http\Requests\UpdateCustomerRequest;
 use Illuminate\Http\Request;
 use Inertia\Inertia;
 use App\Models\Memberships;
+use Illuminate\Support\Facades\DB;
+use Carbon\Carbon;
 
 class CustomersController extends Controller
 {
@@ -49,24 +51,51 @@ class CustomersController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+
     public function create()
     {
         return inertia('customers/create', [
-            'customers' => new Customers()
+            'memberships' => Memberships::select('id', 'name', 'price', 'duration')
+                ->orderBy('name')
+                ->get(),
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
     public function store(StoreCustomerRequest $request)
     {
-        $validated = $request->validated();
+        $data = $request->validated();
 
-        Customers::create($validated);
+        DB::transaction(function () use ($data) {
+            $customer = Customers::create([
+                'name'  => $data['name'],
+                'email' => $data['email'],
+                'phone' => $data['phone'],
+            ]);
+
+            $plan = Memberships::findOrFail($data['membership_id']);
+            $start = Carbon::parse($data['start_date']);
+
+            $end = match ($plan->duration) {
+                'weekly'  => $start->copy()->addWeek(),
+                'monthly' => $start->copy()->addMonth(),
+                'year'  => $start->copy()->addYear(),
+            };
+
+            $membership = $customer->memberships()->create([
+                'membership_id' => $plan->id,
+                'start_date'    => $start,
+                'end_date'      => $end,
+                'status'        => 'active',
+            ]);
+
+            $membership->payments()->create([
+                'amount'         => $plan->price,
+                'payment_method' => $data['payment_method'],
+            ]);
+        });
+
         return redirect()->route('customers.index')->with('success', 'Cliente creado exitosamente.');
     }
-
     /**
      * Display the specified resource.
      */
