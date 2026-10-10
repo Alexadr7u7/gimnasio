@@ -49,7 +49,7 @@ export default function CustomerList({ customers, filters }: CustomerListProps) 
             <TableHeader>
                 <TableRow className="h-11 uppercase tracking-wider">
                     <TableHead className="px-4">
-                        <SortLink filters={filters} field="id" label="Cliente" />
+                        <SortLink filters={filters} field="name" label="Cliente" />
                     </TableHead>
                     <TableHead className="px-4">
                         <SortLink filters={filters} field="phone" label="Teléfono" />

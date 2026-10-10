@@ -1,5 +1,6 @@
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectGroup, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { cleanParams } from '@/lib/clean-params';
 import { Filters, PageLinkItem } from '@/types';
 import { Link, router } from '@inertiajs/react';
 import { ChevronLeft, ChevronRight } from 'lucide-react';
@@ -16,14 +17,10 @@ export default function Pagination({ links, currentPage, setCurrentPage, filters
         const newPerPage = value;
         setCurrentPage(parseInt(newPerPage));
 
-        router.get(
-            route('customers.index'),
-            { ...filters, perPage: newPerPage },
-            {
-                preserveState: true,
-                preserveScroll: true,
-            },
-        );
+        router.get(route('customers.index'), cleanParams({ ...filters, perPage: value, page: 1 }), {
+            preserveState: true,
+            preserveScroll: true,
+        });
     };
 
     return (

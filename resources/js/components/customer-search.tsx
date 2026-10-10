@@ -1,10 +1,10 @@
+import { cleanParams } from '@/lib/clean-params';
 import { Filters, Stats } from '@/types';
 import { router } from '@inertiajs/react';
 import { Search } from 'lucide-react';
 import React from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-
 type CustomerSearchProps = {
     search: string;
     setSearch: (value: string) => void;
@@ -37,9 +37,11 @@ export default function CustomerSearch({ search, setSearch, filters, memberships
 
     // Mezcla los filtros actuales con el cambio nuevo
     const applyFilters = (params: Partial<Filters>) => {
-        router.get(route('customers.index'), { ...filters, ...params }, { preserveState: true, preserveScroll: true });
+        router.get(route('customers.index'), cleanParams({ ...filters, ...params }), {
+            preserveState: true,
+            preserveScroll: true,
+        });
     };
-
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const value = e.target.value;
         setSearch(value);

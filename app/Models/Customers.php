@@ -87,8 +87,7 @@ class Customers extends Model
                 $direction
             );
         }
-
-        $allowed = ['created_at', 'name', 'email'];
+        $allowed = ['id', 'created_at', 'name', 'email', 'phone'];
 
         return $query->orderBy(in_array($sortBy, $allowed) ? $sortBy : 'created_at', $direction);
     }
