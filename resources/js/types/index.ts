@@ -44,6 +44,7 @@ export interface Membership {
     name: string;
     price: number;
     duration: number;
+    description?: string;
 }
 
 export interface CustomerMembership {

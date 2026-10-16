@@ -55,7 +55,7 @@ class CustomersController extends Controller
     public function create()
     {
         return inertia('customers/create', [
-            'memberships' => Memberships::select('id', 'name', 'price', 'duration')
+            'memberships' => Memberships::select('id', 'name', 'price', 'description', 'duration')
                 ->orderBy('name')
                 ->get(),
         ]);

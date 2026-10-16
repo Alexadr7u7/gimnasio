@@ -16,6 +16,7 @@ return new class extends Migration
             $table->string('name');
             $table->decimal('price', 8, 2);
             $table->enum('duration', ['monthly', 'weekly', 'year'])->default('monthly');
+            $table->string('description')->nullable();
             $table->timestamps();
         });
     }

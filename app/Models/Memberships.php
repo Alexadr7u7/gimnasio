@@ -14,6 +14,7 @@ class Memberships extends Model
         'name',
         'price',
         'duration',
+        'description',
     ];
 
     public function Customer_Memberships()

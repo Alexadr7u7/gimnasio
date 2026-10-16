@@ -1,4 +1,5 @@
 import CustomerSearch from '@/components/customer-search';
+import Heading from '@/components/heading';
 import Pagination from '@/components/pagination';
 import { Button } from '@/components/ui/button';
 import CustomerList from '@/components/ui/customers-list';
@@ -43,22 +44,15 @@ export default function Index({ customers, filters, memberships, stats }: IndexP
     return (
         <AppLayout breadcrumbs={breadcrumbs}>
             <Head title="Clientes" />
-            <main className="bg-background w-full px-6 py-6">
-                <div className="mb-6 flex flex-col justify-between gap-4 xl:flex-row xl:items-center">
-                    <div>
-                        <h1 className="text-foreground text-3xl font-bold tracking-tight">Gestión de Clientes</h1>
-                        <p className="text-muted-foreground mt-1 text-sm">Administra altas, renovaciones y datos de contacto de tus clientes.</p>
-                    </div>
-
-                    <div className="flex flex-wrap items-center gap-2">
-                        <Link href={route('customers.create')} className="w-full">
-                            <Button className="gap-2 shadow-[0_0_20px_rgba(185,28,28,0.35)]">
-                                <UserPlus className="h-5 w-5" />
-                                Registrar Nuevo Cliente
-                            </Button>
-                        </Link>
-                    </div>
-                </div>
+            <div className="bg-background w-full px-6 py-6">
+                <Heading title="Gestión de Clientes" description="Administra altas, renovaciones y datos de contacto de tus clientes.">
+                    <Link href={route('customers.create')} className="w-full">
+                        <Button className="gap-2 shadow-[0_0_20px_rgba(185,28,28,0.35)]">
+                            <UserPlus className="h-5 w-5" />
+                            Registrar Nuevo Cliente
+                        </Button>
+                    </Link>
+                </Heading>
 
                 <CustomerStats stats={stats} />
 
@@ -84,7 +78,7 @@ export default function Index({ customers, filters, memberships, stats }: IndexP
                         setCurrentPage={(value: number) => setData('perPage', value)}
                     />
                 </div>
-            </main>
+            </div>
         </AppLayout>
     );
 }
