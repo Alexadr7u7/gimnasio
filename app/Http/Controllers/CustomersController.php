@@ -10,6 +10,7 @@ use Inertia\Inertia;
 use App\Models\Memberships;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
+use App\Models\Payments;
 
 class CustomersController extends Controller
 {
@@ -99,9 +100,24 @@ class CustomersController extends Controller
     /**
      * Display the specified resource.
      */
-    public function show(Customers $customers)
+    public function show(Customers $customer)
     {
-        //
+        $payments = Payments::whereHas('customerMembership', fn($q) => $q->where('customer_id', $customer->id))
+            ->with('customerMembership.membership')
+            ->orderByDesc('created_at')
+            ->get()
+            ->map(fn($p) => [
+                'id'             => $p->id,
+                'created_at'   => $p->created_at->format('d M Y'),
+                'concept'        => 'Membresía ' . $p->customerMembership->membership->name,
+                'payment_method' => $p->payment_method,
+                'amount'         => $p->amount,
+            ]);
+
+        return inertia('customers/show', [
+            'customer' => $customer->load('latestMembership.membership'),
+            'payments' => $payments,
+        ]);
     }
 
     /**

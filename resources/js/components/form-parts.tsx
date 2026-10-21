@@ -1,5 +1,6 @@
 import { cn } from '@/lib/utils';
 import type { ReactNode } from 'react';
+import { Card } from './ui/card';
 
 export const labelClass = 'text-tertiary text-xs font-medium tracking-wider uppercase';
 export const inputClass =
@@ -14,12 +15,12 @@ export function FormSection({
 }: {
     icon: ReactNode;
     title: string;
-    subtitle: string;
+    subtitle?: string;
     children: ReactNode;
     className?: string;
 }) {
     return (
-        <section className={cn('bg-card flex flex-col gap-4 rounded-xl p-6 shadow-md', className)}>
+        <Card className={cn('flex flex-col gap-4 p-6', className)}>
             <div className="flex items-center gap-3">
                 <div className="bg-accent text-tertiary flex h-8 w-8 items-center justify-center rounded-lg">{icon}</div>
                 <div>
@@ -28,7 +29,7 @@ export function FormSection({
                 </div>
             </div>
             {children}
-        </section>
+        </Card>
     );
 }
 

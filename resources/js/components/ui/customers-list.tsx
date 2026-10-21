@@ -130,9 +130,11 @@ export default function CustomerList({ customers, filters }: CustomerListProps) 
                             {/* Acciones */}
                             <TableCell className="px-4 py-3.5 text-right">
                                 <div className="flex items-center justify-end gap-1">
-                                    <button className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" title="Ver Ficha">
-                                        <Eye className="h-4 w-4" />
-                                    </button>
+                                    <Link href={route('customers.show', customer.id)}>
+                                        <button className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground" title="Ver Ficha">
+                                            <Eye className="h-4 w-4" />
+                                        </button>
+                                    </Link>
                                     <Link href={route('customers.edit', customer.id)}>
                                         <button
                                             className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-accent hover:text-foreground"
@@ -144,14 +146,7 @@ export default function CustomerList({ customers, filters }: CustomerListProps) 
                                     <button className="rounded-lg p-2 text-secondary transition-colors hover:bg-accent hover:text-primary" title="Renovar">
                                         <RefreshCw className="h-4 w-4" />
                                     </button>
-                                    <button
-                                        disabled={processing}
-                                        onClick={() => handleDelete(customer.id)}
-                                        className="rounded-lg p-2 text-muted-foreground transition-colors hover:bg-destructive/10 hover:text-destructive"
-                                        title="Eliminar"
-                                    >
-                                        <MoreVertical className="h-4 w-4" />
-                                    </button>
+                                 
                                 </div>
                             </TableCell>
                         </TableRow>

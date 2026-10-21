@@ -9,11 +9,17 @@ class Payments extends Model
     protected $primaryKey = 'id';
     protected $fillable = [
         'amount',
-        'date_payment',
+        'created_at',
+        'payment_method',
+        'customer_membership_id',
     ];
 
-    public function Customer_Memberships()
+    protected $casts = [
+        'created_at' => 'date:Y-m-d',
+    ];
+
+    public function customerMembership()
     {
-        return $this->belongsTo(Customer_Memberships::class, 'customer_membership_id');
+        return $this->belongsTo(Customer_memberships::class, 'customer_membership_id');
     }
 }

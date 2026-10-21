@@ -87,3 +87,11 @@ export type Stats = {
     expired: number;
     new_this_month: number;
 };
+
+export type PaymentRow = {
+    id: number;
+    created_at: string;
+    concept: string;
+    payment_method: string;
+    amount: string | number;
+};

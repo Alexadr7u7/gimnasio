@@ -4,7 +4,7 @@ import { Button } from '@/components/ui/button';
 import AppLayout from '@/layouts/app-layout';
 import { Membership, type BreadcrumbItem } from '@/types';
 import { Head, Link, useForm } from '@inertiajs/react';
-import { BadgeCheck, Banknote, Check, CheckCircle, CreditCard, Landmark, Mail, Phone, User } from 'lucide-react';
+import { BadgeCheck, Banknote, CheckCircle, CreditCard, Landmark, Mail, Phone, User } from 'lucide-react';
 
 const breadcrumbs: BreadcrumbItem[] = [
     { title: 'Clientes', href: '/customers' },
@@ -48,10 +48,6 @@ export default function Create({ memberships }: { memberships: Membership[] }) {
                     <Link href={route('customers.index')}>
                         <Button variant="outline">Cancelar</Button>
                     </Link>
-                    <Button type="submit" form="socio-alta-form" disabled={!canSubmit}>
-                        <Check size={18} />
-                        Guardar Socio
-                    </Button>
                 </Heading>
 
                 <form id="socio-alta-form" onSubmit={handleSubmit} className="grid w-full grid-cols-1 items-start gap-6 lg:grid-cols-12">
