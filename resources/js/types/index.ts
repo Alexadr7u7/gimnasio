@@ -49,11 +49,13 @@ export interface Membership {
 
 export interface CustomerMembership {
     id: number;
+    membership_id: number;
     status: 'active' | 'inactive' | 'expiring_soon' | 'expired';
     computed_status: 'active' | 'inactive' | 'expiring_soon' | 'expired';
     start_date: string;
     end_date: string;
     membership: Membership;
+    payments?: PaymentRow[];
 }
 
 export interface Customer {

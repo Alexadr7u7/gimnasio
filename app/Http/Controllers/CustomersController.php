@@ -11,6 +11,7 @@ use App\Models\Memberships;
 use Illuminate\Support\Facades\DB;
 use Carbon\Carbon;
 use App\Models\Payments;
+use Illuminate\Support\Arr;
 
 class CustomersController extends Controller
 {
@@ -126,7 +127,13 @@ class CustomersController extends Controller
     public function edit(Customers $customer)
     {
         return inertia('customers/edit', [
-            'customers' => $customer
+            'customer' => $customer->load([
+                'latestMembership.membership',
+                'latestMembership.payments' => fn($q) => $q->latest(),
+            ]),
+            'memberships' => Memberships::select('id', 'name', 'price', 'description', 'duration')
+                ->orderBy('name')
+                ->get(),
         ]);
     }
 
@@ -135,12 +142,67 @@ class CustomersController extends Controller
      */
     public function update(UpdateCustomerRequest $request, Customers $customer)
     {
-        $validated = $request->validated();
+        $data = $request->validated();
 
-        $customer->update($validated);
+        DB::transaction(function () use ($customer, $data) {
+            $customer->update(Arr::only($data, ['name', 'email', 'phone']));
+
+            $plan  = Memberships::findOrFail($data['membership_id']);
+            $start = Carbon::parse($data['start_date']);
+            $end   = $this->calculateEnd($plan->duration, $start);
+
+            $membership = $customer->latestMembership;
+
+            if ($membership) {
+                $planChanged = (int) $membership->membership_id !== (int) $plan->id;
+
+                $membership->update([
+                    'membership_id' => $plan->id,
+                    'start_date'    => $start,
+                    'end_date'      => $end,
+                ]);
+
+                $payment = $membership->payments()->latest()->first();
+
+                if ($payment) {
+                    $payment->update([
+                        'payment_method' => $data['payment_method'],
+                        // Solo recalcula el monto si cambió el plan,
+                        // así no se altera el precio histórico cobrado.
+                        'amount'         => $planChanged ? $plan->price : $payment->amount,
+                    ]);
+                } else {
+                    $membership->payments()->create([
+                        'amount'         => $plan->price,
+                        'payment_method' => $data['payment_method'],
+                    ]);
+                }
+            } else {
+                // El cliente no tenía membresía: se crea
+                $membership = $customer->memberships()->create([
+                    'membership_id' => $plan->id,
+                    'start_date'    => $start,
+                    'end_date'      => $end,
+                    'status'        => 'active',
+                ]);
+
+                $membership->payments()->create([
+                    'amount'         => $plan->price,
+                    'payment_method' => $data['payment_method'],
+                ]);
+            }
+        });
+
         return redirect()->route('customers.index')->with('success', 'Cliente actualizado exitosamente.');
     }
-
+    private function calculateEnd(string $duration, Carbon $start): Carbon
+    {
+        return match ($duration) {
+            'weekly'  => $start->copy()->addWeek(),
+            'monthly' => $start->copy()->addMonth(),
+            'year'    => $start->copy()->addYear(),
+        };
+    }
     /**
      * Remove the specified resource from storage.
      */
